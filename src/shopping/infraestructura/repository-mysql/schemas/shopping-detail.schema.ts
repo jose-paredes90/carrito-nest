@@ -3,7 +3,10 @@ import { ShoppingSchema } from './shopping.schema';
 @Entity({ name: 'shopping-detail' })
 export class ShoppingDetailSchema {
   @PrimaryGeneratedColumn()
-  productId: number;
+  id: number
+
+  @Column()
+  productId: string;
 
   @Column()
   quantity: number;

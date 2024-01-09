@@ -11,10 +11,11 @@ export class ShoppingRepository implements ShoppingRepositoryInterface {
     private readonly shoppingSchemaRepository: Repository<ShoppingSchema>,
   ) { }
 
+
   public async get(): Promise<Shopping[]> {
     const response = await this.shoppingSchemaRepository.find({
       relations: ['details'],
-      
+
     });
     return response.map((item) => {
       return {

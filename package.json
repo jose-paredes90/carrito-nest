@@ -28,7 +28,9 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
     "@nestjs/swagger": "^7.1.1",
-    "typeorm": "^0.3.17"
+    "@nestjs/microservices": "^10.0.5",
+    "typeorm": "^0.3.17",
+    "kafkajs": "^2.2.4"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

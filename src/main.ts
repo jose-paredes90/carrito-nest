@@ -1,10 +1,32 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  const microservices = await NestFactory.createMicroservice<MicroserviceOptions>(
+    AppModule,
+    {
+      transport: Transport.KAFKA,
+      options: {
+        client: {
+          brokers: ['localhost:29092'],
+        },
+        consumer: {
+          groupId: 'kafka-shopping-consumer-nest',
+        },
+        subscribe: {
+          fromBeginning: true
+        }
+      },
+    },
+  );
+
+  await microservices.listen();
+  await app.startAllMicroservices();
+  
   const config = new DocumentBuilder()
     .setTitle('Shopping API')
     .setDescription('The shopping API description')

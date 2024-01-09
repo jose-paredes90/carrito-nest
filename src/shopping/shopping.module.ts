@@ -6,6 +6,7 @@ import { ShoppingDetailSchema } from './infraestructura/repository-mysql/schemas
 import { ShoppingController } from './infraestructura/controllers/shopping.controller';
 import { ShoppingRepository } from './infraestructura/repository-mysql/repositories/shopping-repository';
 import { ShoppingUsecases } from './application/useCases/shopping-usecases/shopping-usecases';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   providers: [
@@ -25,6 +26,22 @@ import { ShoppingUsecases } from './application/useCases/shopping-usecases/shopp
       synchronize: true,
     }),
     TypeOrmModule.forFeature([ShoppingSchema, ShoppingDetailSchema]),
+
+    ClientsModule.register([
+      {
+        name: 'SHOPPING_EVENT',
+        transport: Transport.KAFKA,
+        options: {
+          client: {
+            clientId: 'shopping-clientId',
+            brokers: ['localhost:29092'],
+          },
+          consumer: {
+            groupId: 'shopping-consumer',
+          },
+        },
+      },
+    ])
   ],
 })
 export class ShoppingModule {}
