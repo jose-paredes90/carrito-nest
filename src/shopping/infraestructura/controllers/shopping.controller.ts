@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Inject, Post } from "@nestjs/common";
-import { ClientKafka } from "@nestjs/microservices";
+import { ClientKafka} from "@nestjs/microservices";
 import { ApiTags } from "@nestjs/swagger";
 import { ShoppingCreateDTO } from "src/shopping/application/dtos/shopping-create.dto";
 import { ShoppingUseCasesPort } from "src/shopping/application/useCasesPort/shopping-usecases.port";
@@ -8,8 +8,8 @@ import { ShoppingUseCasesPort } from "src/shopping/application/useCasesPort/shop
 @Controller('shopping')
 export class ShoppingController {
 
-    constructor(@Inject('ShoppingUseCases')
-    private readonly shoppingUseCasesPort: ShoppingUseCasesPort,
+    constructor(
+    @Inject('ShoppingUseCases')private readonly shoppingUseCasesPort: ShoppingUseCasesPort,
     @Inject('SHOPPING_EVENT') private readonly kafkaClient: ClientKafka) { }
 
     async onModuleInit() {
@@ -24,7 +24,6 @@ export class ShoppingController {
 
     @Post()
     public async create(@Body() body: ShoppingCreateDTO) {
-        console.log(body);
         const response =  await this.shoppingUseCasesPort.createShopping(body);
         if (response) {
             this.kafkaClient.emit('shopping-create', response);
