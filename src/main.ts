@@ -5,7 +5,11 @@ import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+  app.enableCors({
+    origin: 'http://localhost:4200', // o '*' para permitir cualquier origen
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // habilitar credenciales (si es necesario)
+  });
   const microservices = await NestFactory.createMicroservice<MicroserviceOptions>(
     AppModule,
     {
@@ -26,7 +30,7 @@ async function bootstrap() {
 
   await microservices.listen();
   await app.startAllMicroservices();
-  
+
   const config = new DocumentBuilder()
     .setTitle('Shopping API')
     .setDescription('The shopping API description')
@@ -35,7 +39,7 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, document);
-
+  
   await app.listen(3000);
 }
 
